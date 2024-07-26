@@ -5,34 +5,69 @@
 <div class="grid">
     <div class="col-12 md:col-6">
         <p-fieldset legend="i18nSelect Pipe" [toggleable]="true">
-            
+            <p>Saludor {{name}} es un placer
+                <!-- i18nSelect require del objeto invitationMap para mostrar la opcion que se haya configurado -->
+                {{ gender | i18nSelect:invitationMap }}
+                a nuestro evento
+            </p>
+            <p-button
+                (click)="changeClient()"
+                label="Cambiar persona"
+            ></p-button>
         </p-fieldset>
     </div>
     <div class="col-12 md:col-6">
         <p-fieldset legend="i18nPlural Pipe" [toggleable]="true">
-            
+            <p>Actualmente {{ clients.length | i18nPlural:clientsMap }}</p>
+            <p-button
+                (click)="deleteClient()"
+                label="Atender"
+            ></p-button>
         </p-fieldset>
     </div>
     <div class="col-12 md:col-6">
         <p-fieldset legend="Slice Pipe" [toggleable]="true">
-            
+            <b>Original</b>
+            <pre>{{ clients }}</pre>
+
+            <b>Slice:0:2</b>
+            <pre>{{ clients | slice:0:2 }}</pre>
+
+            <b>Slice:2:4</b>
+            <pre>{{ clients | slice:2:4 }}</pre>
+
+            <!-- Hace el la eliminacion del final hacia el inicio (a la inversa) -->
+            <b>Slice:2:-2</b>
+            <pre>{{ clients | slice:0:-3 }}</pre>
         </p-fieldset>
     </div>
     <div class="col-12 md:col-6">
         <p-fieldset legend="Json Pipe" [toggleable]="true">
-            
+            <pre>{{ person | json }}</pre>
         </p-fieldset>
     </div>
     <div class="col-12 md:col-6">
         <p-fieldset legend="KeyValue Pipe" [toggleable]="true">
-            
+            <ul>
+                <!-- Sin el pipe, esto muestra un error: type is not assignable to type NgIterable<any> -->
+                <li *ngFor="let item of person | keyvalue">
+                <!-- Lo que hace el pipe es transformar en pares de valores, donde "item" tendra key-value-pairs -->
+                    <b>{{ item.key | titlecase }}:</b> {{ item.value }}
+                </li>
+            </ul>
         </p-fieldset>
     </div>
     <div class="col-12 md:col-6">
         <!-- Permite abrir o escuchar un Observable o Promise, muestra el valor, y cuando ya no
          vamos a ocupar el componente y se va a destruir, automaicamente realiza la limpieza -->
         <p-fieldset legend="Async Pipe" [toggleable]="true">
-            
-        </p-fieldset>
+            <pre *ngIf="!(myObservableyTimer | async)">Resolviendo Observable</pre>
+            <pre> {{ myObservableyTimer | async }}</pre>
+
+            <!-- No es posible cancelar la promise con el pipe async como se hace con los Observable, por lo que
+             seimpre se ejecutara la promise -->
+            <pre *ngIf="!(promiseValue | async)">Resolviendo Promise</pre>
+            <pre> {{  promiseValue | async }}</pre>
+        </p-fieldset> 
     </div>
 </div>
